@@ -13,8 +13,8 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_B[0]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_HS
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VGA_VS
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk_50
-set_instance_assignment -name IO_STANDARD "3.3-V SCHMITT TRIGGER" -to rst_n
-set_instance_assignment -name IO_STANDARD "3.3-V SCHMITT TRIGGER" -to up
+set_instance_assignment -name IO_STANDARD "3.3 V Schmitt Trigger" -to rst_n
+set_instance_assignment -name IO_STANDARD "3.3 V Schmitt Trigger" -to up
 set_location_assignment PIN_AA1 -to VGA_R[3]
 set_location_assignment PIN_V1 -to VGA_R[2]
 set_location_assignment PIN_Y2 -to VGA_R[1]

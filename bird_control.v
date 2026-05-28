@@ -22,7 +22,7 @@ module bird_control(
 		end
 		else begin
 			if (!up_valid) begin
-				y_coord <= (frame_done_reg) ? y_coord - 2'd3 : y_coord;
+				y_coord <= (frame_done_reg) ? y_coord - 3'd4 : y_coord;
 			end
 			else begin
 				y_coord <= (frame_done_reg) ? y_coord + 2'd2 : y_coord;
