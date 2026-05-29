@@ -16,6 +16,7 @@ module vga_controller(
 	
 	parameter[9:0] MAX_H_OFFSET = 10'd699, MAX_H = 10'd639, MAX_V = 10'd479, PILLAR_WIDTH = 10'd60;
 	parameter[9:0] BIRD_LEFT = 10'd180, BIRD_RIGHT = 10'd203, BIRD_HEIGHT = 10'd20;
+	reg next_pillar=0;
 	reg[9:0] x_count=0, y_count=0, pillar1_x_reg=0, upper_pillar1_reg=10'd179, bottom_pillar1_reg=10'd359;
 	reg[9:0] left1_bound=0, right1_bound=0;
 	reg[9:0] bird_pos_reg=0;
@@ -36,6 +37,7 @@ module vga_controller(
 			right2_bound <= MAX_H_OFFSET - pillar2_x_reg + PILLAR_WIDTH;
 			over <= 1'b0;
 			score <= 8'd0;
+			next_pillar <= 1'b0;
 		end
 		else begin
 			pillar1_x_reg <= pillar1_x;
@@ -84,6 +86,55 @@ module vga_controller(
 					over <= 1'b0;
 				end
 			end
+			else if ((BIRD_LEFT <= left2_bound) && (BIRD_RIGHT >= left2_bound)) begin
+				if ((bird_pos_reg <= upper_pillar2_reg) || ((bird_pos_reg+BIRD_HEIGHT)>=bottom_pillar2_reg)) begin
+					over <= 1'b1;
+				end
+				else begin
+					over <= 1'b0;
+				end
+			end
+			else if ((BIRD_LEFT <= right1_bound) && (BIRD_RIGHT > right1_bound)) begin
+				if ((bird_pos_reg <= upper_pillar1_reg) || ((bird_pos_reg+BIRD_HEIGHT)>=bottom_pillar1_reg)) begin
+					over <= 1'b1;
+				end
+				else begin
+					over <= 1'b0;
+				end
+			end
+			else if ((BIRD_LEFT <= right2_bound) && (BIRD_RIGHT > right2_bound)) begin
+				if ((bird_pos_reg <= upper_pillar2_reg) || ((bird_pos_reg+BIRD_HEIGHT)>=bottom_pillar2_reg)) begin
+					over <= 1'b1;
+				end
+				else begin
+					over <= 1'b0;
+				end
+			end
+			else if ((BIRD_LEFT >= left1_bound) && (BIRD_RIGHT <= left1_bound)) begin
+				if ((bird_pos_reg <= upper_pillar1_reg) || ((bird_pos_reg+BIRD_HEIGHT)>=bottom_pillar1_reg)) begin
+					over <= 1'b1;
+				end
+				else begin
+					over <= 1'b0;
+				end
+			end
+			else if ((BIRD_LEFT >= left2_bound) && (BIRD_RIGHT <= left2_bound)) begin
+				if ((bird_pos_reg <= upper_pillar2_reg) || ((bird_pos_reg+BIRD_HEIGHT)>=bottom_pillar2_reg)) begin
+					over <= 1'b1;
+				end
+				else begin
+					over <= 1'b0;
+				end
+			end
+			
+			if ((BIRD_LEFT > right1_bound) && !next_pillar) begin
+				next_pillar <= ~next_pillar;
+				score <= score + 1'b1;
+			end
+			else if ((BIRD_LEFT > right2_bound) && next_pillar) begin
+				next_pillar <= ~next_pillar;
+				score <= score + 1'b1;
+			end
 			//if ((bird_pos_reg <= upper_pillar1_reg)&&(BIRD_LEFT<right1_bound || BIRD_RIGHT>left1_bound)) begin
 			//	over <= 1'b1;
 			//end
@@ -100,7 +151,6 @@ module vga_controller(
 			//	over <= 1'b0;
 			//end
 
-			score <= (right1_bound < BIRD_LEFT || right2_bound < BIRD_LEFT) ? score + 1'b1 : score;
 		end
 	end
 	
