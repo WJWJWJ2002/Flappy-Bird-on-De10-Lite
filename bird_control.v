@@ -1,12 +1,13 @@
 module bird_control(
 	input clk,
 	input rst_n,
+	input over,
 	input up,
 	input frame_done,
 	output reg[9:0] y_coord=10'd239
 );
 	
-	reg frame_done_reg=1'b0;
+	reg frame_done_reg=1'b0, over_reg=0;
 	
 	wire up_valid;
 
@@ -17,7 +18,7 @@ module bird_control(
 	);
 
 	always @(posedge clk) begin
-		if (!rst_n) begin
+		if (!rst_n || over_reg) begin
 			y_coord <= 10'd239;
 		end
 		else begin
@@ -37,6 +38,7 @@ module bird_control(
 		else begin
 			frame_done_reg <= frame_done;
 		end
+		over_reg <= over;
 	end
 endmodule
 

@@ -6,10 +6,13 @@ module flappy_bird(
 	output wire VGA_VS,
 	output wire[3:0] VGA_R,
 	output wire[3:0] VGA_G,
-	output wire[3:0] VGA_B
+	output wire[3:0] VGA_B,
+	output wire[7:0] seg0,
+	output wire[7:0] seg1
 );
 
-	wire clk_25, frame_done, active_pillar1, active_pillar1_n, active_pillar2;
+	wire clk_25, frame_done, over;
+	wire[7:0] score;
 	wire[9:0] pillar1_pos, pillar2_pos, bird_pos;
 
 	PLL pll_0 (
@@ -22,6 +25,7 @@ module flappy_bird(
 	) pillar1 (
 		.clk(clk_25),
 		.rst_n(rst_n),
+		.over(over),
 		.frame_done(frame_done),
 		.pillar_pos(pillar2_pos),
 		.x_coord(pillar1_pos)
@@ -32,6 +36,7 @@ module flappy_bird(
 	) pillar2 (
 		.clk(clk_25),
 		.rst_n(rst_n),
+		.over(over),
 		.frame_done(frame_done),
 		.pillar_pos(pillar1_pos),
 		.x_coord(pillar2_pos)
@@ -40,6 +45,7 @@ module flappy_bird(
 	bird_control bird_gen_0 (
 		.clk(clk_25),
 		.rst_n(rst_n),
+		.over(over),
 		.up(up),
 		.frame_done(frame_done),
 		.y_coord(bird_pos)
@@ -48,6 +54,7 @@ module flappy_bird(
 	vga_controller vga_0 (
 		.clk(clk_25),
 		.rst_n(rst_n),
+		.over(over),
 		.pillar1_x(pillar1_pos),
 		.pillar2_x(pillar2_pos),
 		.bird_pos_y(bird_pos),
@@ -56,9 +63,16 @@ module flappy_bird(
 		.VGA_B(VGA_B),
 		.H_SYNC(VGA_HS),
 		.V_SYNC(VGA_VS),
-		.frame_done(frame_done)
+		.frame_done(frame_done),
+		.score(score)
 	);
 
-	assign active_pillar1_n = ~active_pillar1;
+	score_gen hex2bcd (
+		.clk(clk_25),
+		.score(score),
+		.seg0(seg0),
+		.seg1(seg1)
+	);
+
 endmodule
 

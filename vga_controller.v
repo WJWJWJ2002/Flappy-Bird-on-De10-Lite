@@ -5,11 +5,13 @@ module vga_controller(
 	input[9:0] pillar2_x,
 	input[9:0] bird_pos_y,
 	output frame_done,
+	output reg over=0,
 	output reg H_SYNC=0,
 	output reg V_SYNC=0,
 	output reg[3:0] VGA_R=0,
 	output reg[3:0] VGA_G=0, 
-	output reg[3:0] VGA_B=0
+	output reg[3:0] VGA_B=0,
+	output reg[7:0] score=0
 );
 	
 	parameter[9:0] MAX_H_OFFSET = 10'd699, MAX_H = 10'd639, MAX_V = 10'd479, PILLAR_WIDTH = 10'd60;
@@ -20,7 +22,7 @@ module vga_controller(
 	reg[9:0] pillar2_x_reg=0, upper_pillar2_reg=10'd100, bottom_pillar2_reg=10'd240, left2_bound=0, right2_bound=0;
 	
 	always @(posedge clk) begin
-		if (!rst_n) begin
+		if (!rst_n || over) begin
 			VGA_R <= 4'd0;
 			VGA_G <= 4'd0;
 			VGA_B <= 4'd0;
@@ -32,6 +34,8 @@ module vga_controller(
 			right1_bound <= MAX_H_OFFSET - pillar1_x_reg + PILLAR_WIDTH;
 			left2_bound <= MAX_H_OFFSET - pillar2_x_reg;
 			right2_bound <= MAX_H_OFFSET - pillar2_x_reg + PILLAR_WIDTH;
+			over <= 1'b0;
+			score <= 8'd0;
 		end
 		else begin
 			pillar1_x_reg <= pillar1_x;
@@ -68,6 +72,35 @@ module vga_controller(
 				) ? 
 				(4'd15) : (4'd0): 
 				(4'd0);
+			
+			if ((bird_pos_reg+BIRD_HEIGHT) > MAX_V || bird_pos_reg == 10'd0) begin
+				over <= 1'b1;
+			end
+			else if ((BIRD_LEFT <= left1_bound) && (BIRD_RIGHT >= left1_bound)) begin
+				if ((bird_pos_reg <= upper_pillar1_reg) || ((bird_pos_reg+BIRD_HEIGHT)>=bottom_pillar1_reg)) begin
+					over <= 1'b1;
+				end
+				else begin
+					over <= 1'b0;
+				end
+			end
+			//if ((bird_pos_reg <= upper_pillar1_reg)&&(BIRD_LEFT<right1_bound || BIRD_RIGHT>left1_bound)) begin
+			//	over <= 1'b1;
+			//end
+			//else if ((bird_pos_reg <= upper_pillar2_reg)&&(BIRD_LEFT<right2_bound || BIRD_RIGHT>left2_bound)) begin
+			//	over <= 1'b1;
+			//end
+			//else if (((bird_pos_reg+BIRD_HEIGHT)>bottom_pillar1_reg)&&(BIRD_LEFT<right1_bound || BIRD_RIGHT>left1_bound)) begin
+			//	over <= 1'b1;
+			//end
+			//else if (((bird_pos_reg+BIRD_HEIGHT)>bottom_pillar2_reg)&&(BIRD_LEFT<right2_bound || BIRD_RIGHT>left2_bound)) begin
+			//	over <= 1'b1;
+			//end
+			//else begin
+			//	over <= 1'b0;
+			//end
+
+			score <= (right1_bound < BIRD_LEFT || right2_bound < BIRD_LEFT) ? score + 1'b1 : score;
 		end
 	end
 	
