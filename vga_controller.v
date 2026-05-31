@@ -135,22 +135,6 @@ module vga_controller(
 				next_pillar <= ~next_pillar;
 				score <= score + 1'b1;
 			end
-			//if ((bird_pos_reg <= upper_pillar1_reg)&&(BIRD_LEFT<right1_bound || BIRD_RIGHT>left1_bound)) begin
-			//	over <= 1'b1;
-			//end
-			//else if ((bird_pos_reg <= upper_pillar2_reg)&&(BIRD_LEFT<right2_bound || BIRD_RIGHT>left2_bound)) begin
-			//	over <= 1'b1;
-			//end
-			//else if (((bird_pos_reg+BIRD_HEIGHT)>bottom_pillar1_reg)&&(BIRD_LEFT<right1_bound || BIRD_RIGHT>left1_bound)) begin
-			//	over <= 1'b1;
-			//end
-			//else if (((bird_pos_reg+BIRD_HEIGHT)>bottom_pillar2_reg)&&(BIRD_LEFT<right2_bound || BIRD_RIGHT>left2_bound)) begin
-			//	over <= 1'b1;
-			//end
-			//else begin
-			//	over <= 1'b0;
-			//end
-
 		end
 	end
 	

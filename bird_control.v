@@ -9,20 +9,12 @@ module bird_control(
 	
 	reg frame_done_reg=1'b0, over_reg=0;
 	
-	wire up_valid;
-
-	up_sampling player_input (
-		.clk (clk),
-		.up (up),
-		.up_valid (up_valid)
-	);
-
 	always @(posedge clk) begin
 		if (!rst_n || over_reg) begin
 			y_coord <= 10'd239;
 		end
 		else begin
-			if (!up_valid) begin
+			if (!up) begin
 				y_coord <= (frame_done_reg) ? y_coord - 3'd4 : y_coord;
 			end
 			else begin

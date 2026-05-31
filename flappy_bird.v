@@ -8,7 +8,10 @@ module flappy_bird(
 	output wire[3:0] VGA_G,
 	output wire[3:0] VGA_B,
 	output wire[7:0] seg0,
-	output wire[7:0] seg1
+	output wire[7:0] seg1,
+	output wire[7:0] seg2,
+	output wire[7:0] seg3
+
 );
 
 	wire clk_25, frame_done, over;
@@ -69,9 +72,12 @@ module flappy_bird(
 
 	score_gen hex2bcd (
 		.clk(clk_25),
+		.rst_n(rst_n),
 		.score(score),
 		.seg0(seg0),
-		.seg1(seg1)
+		.seg1(seg1),
+		.seg2(seg2),
+		.seg3(seg3)
 	);
 
 endmodule
