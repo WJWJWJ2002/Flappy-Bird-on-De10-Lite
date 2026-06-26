@@ -19,7 +19,7 @@
 ## PROGRAM "Quartus Prime"
 ## VERSION "Version 18.1.0 Build 625 09/12/2018 SJ Lite Edition"
 
-## DATE    "Thu May 28 20:44:16 2026"
+## DATE    "Thu May 28 21:41:07 2026"
 
 ##
 ## DEVICE  "10M50DAF484C7G"
@@ -88,6 +88,8 @@ set_clock_uncertainty -fall_from [get_clocks {clk_50}] -fall_to [get_clocks {clk
 # Set Input Delay
 #**************************************************************
 
+set_input_delay -add_delay -max -clock [get_clocks {pll_0|altpll_component|auto_generated|pll1|clk[0]}]  1.811 [get_ports {rst_n}]
+set_input_delay -add_delay -min -clock [get_clocks {pll_0|altpll_component|auto_generated|pll1|clk[0]}]  1.000 [get_ports {rst_n}]
 set_input_delay -add_delay -max -clock [get_clocks {pll_0|altpll_component|auto_generated|pll1|clk[0]}]  1.811 [get_ports {up}]
 set_input_delay -add_delay -min -clock [get_clocks {pll_0|altpll_component|auto_generated|pll1|clk[0]}]  1.000 [get_ports {up}]
 
@@ -138,7 +140,7 @@ set_output_delay -add_delay -min -clock [get_clocks {pll_0|altpll_component|auto
 
 set_false_path  -from  [get_clocks {*|pll1|clk[0]}]  -to  [get_clocks {clk_50}]
 set_false_path  -from  [get_clocks {clk_50}]  -to  [get_clocks {*|pll1|clk[0]}]
-
+set_false_path -to [get_ports seg*]
 
 #**************************************************************
 # Set Multicycle Path

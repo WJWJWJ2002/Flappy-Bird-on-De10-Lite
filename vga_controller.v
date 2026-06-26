@@ -18,8 +18,8 @@ module vga_controller(
 	parameter[9:0] BIRD_LEFT = 10'd180, BIRD_RIGHT = 10'd203, BIRD_HEIGHT = 10'd20;
 	reg next_pillar=0;
 	reg[9:0] x_count=0, y_count=0, pillar1_x_reg=0, upper_pillar1_reg=10'd179, bottom_pillar1_reg=10'd359;
-	reg[9:0] left1_bound=0, right1_bound=0;
-	reg[9:0] bird_pos_reg=0;
+	reg[9:0] left1_bound=10'd639, right1_bound=10'd699;
+	reg[9:0] bird_pos_reg=10'd240;
 	reg[9:0] pillar2_x_reg=0, upper_pillar2_reg=10'd100, bottom_pillar2_reg=10'd240, left2_bound=0, right2_bound=0;
 	
 	always @(posedge clk) begin

@@ -4,14 +4,14 @@ module bird_control(
 	input over,
 	input up,
 	input frame_done,
-	output reg[9:0] y_coord=10'd239
+	output reg[9:0] y_coord=10'd240
 );
 	
 	reg frame_done_reg=1'b0, over_reg=0;
 	
 	always @(posedge clk) begin
 		if (!rst_n || over_reg) begin
-			y_coord <= 10'd239;
+			y_coord <= 10'd240;
 		end
 		else begin
 			if (!up) begin
